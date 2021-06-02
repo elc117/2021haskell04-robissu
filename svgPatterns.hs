@@ -27,11 +27,16 @@ rgbPalette n = take n $ cycle [(255,0,0),(0,255,0),(0,0,255)]
 -- Geração de retângulos em suas posições
 -------------------------------------------------------------------------------
 
-genRectsInLine :: Int -> [Rect]
-genRectsInLine n  = [((m*(w+gap), 0.0), w, h) | m <- [0..fromIntegral (n-1)]]
+genbolasInLine :: Int -> [Rect]
+genbolasInLine n  = [((m*(w+gap), 0.0), w, h) | m <- [0..fromIntegral (n-1)]]
   where (w,h) = (50,50)
         gap = 10
 
+
+genCirclesInLine :: Int -> [Circle]
+genCirclesInLine n  = [((m*30+gap, 100), r) | m <- [0,80..fromIntegral (n-1)]]
+  where (r) = (500)
+        gap = 700000
 
 -------------------------------------------------------------------------------
 -- Strings SVG
@@ -42,6 +47,10 @@ genRectsInLine n  = [((m*(w+gap), 0.0), w, h) | m <- [0..fromIntegral (n-1)]]
 svgRect :: Rect -> String -> String 
 svgRect ((x,y),w,h) style = 
   printf "<rect x='%.3f' y='%.3f' width='%.2f' height='%.2f' style='%s' />\n" x y w h style
+
+svgCircle :: Circle -> String -> String 
+svgCircle ((x,y),r) style = 
+  printf "<circle x='%.3f' y='%.3f' r='%.2f' style='%s' />\n" x y r style
 
 -- String inicial do SVG
 svgBegin :: Float -> Float -> String
@@ -67,13 +76,10 @@ svgElements func elements styles = concat $ zipWith func elements styles
 
 main :: IO ()
 main = do
-  writeFile "rects.svg" $ svgstrs
+  writeFile "figs.svg" $ svgstrs
   where svgstrs = svgBegin w h ++ svgfigs ++ svgEnd
-        svgfigs = svgElements svgRect rects (map svgStyle palette)
-        rects = genRectsInLine nrects
-        palette = rgbPalette nrects
-        nrects = 10
-        (w,h) = (1500,500) -- width,height da imagem SVG
-
-
-
+        svgfigs = svgElements svgCircle bolas (map svgStyle palette)
+        bolas = genCirclesInLine nbolas
+        palette = rgbPalette nbolas
+        nbolas = 10
+        (w,h) = (500,500) -- width,height da imagem SVG
