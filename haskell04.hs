@@ -20,7 +20,7 @@ strColor :: (Int,Int,Int) -> String
 strColor (r,g,b) = "rgb" ++ show(r,g,b)
 
 genCircs :: Int -> (Int,Int) -> Int -> [(Int,Int,Int)]
-genCircs n (cx,cy) r = [(x,cy,r) | x <- take n [cx, cx + 2*r]]
+genCircs n (cx,cy) r = [(x,cy,r) | x <- take n [cx, cx + 2*r..]]
 
 genReds :: Int -> [(Int,Int,Int)] 
 genReds numr = [(x,0,0) | x <- take numr [10,10+5..]]
